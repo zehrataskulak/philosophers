@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   z_atoi.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:21:56 by zzehra            #+#    #+#             */
-/*   Updated: 2025/12/24 09:37:45 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/03/12 17:07:25 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-int	ft_atoi(const char *str)
+long	z_atoi(const char *str)
 {
-	int	num;
-	int	sign;
-	int	i;
+	long	num;
+	int		sign;
+	int		i;
 
 	num = 0;
 	sign = 1;
@@ -33,5 +33,8 @@ int	ft_atoi(const char *str)
 		num = num * 10 + (str[i] - '0');
 		i++;
 	}
-	return (num * sign);
+	if (!str[i] || str[i] == 32 || str[i] == 9 || str[i] == 10)
+		return (num * sign);
+	else
+		return (0);
 }

@@ -1,9 +1,9 @@
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
 SRCS = main.c read_args.c \
-		srcs/ft_atoi.c
+		srcs/z_atoi.c srcs/ft_strchr.c
 
 OBJS = $(SRCS:.c=.o)
 
