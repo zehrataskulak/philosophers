@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_args_init_philo.c                             :+:      :+:    :+:   */
+/*   read_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:12:20 by zzehra            #+#    #+#             */
-/*   Updated: 2026/03/12 20:24:25 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/03/15 16:51:35 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,3 @@ int read_args(int argc, char **argv, t_args *args)
     assign_args(argc, argv, args);
     return (0);
 }
-
-/*void    init_philo(t_philo **philo, t_args args)
-{
-    int i;
-    
-    *philo = malloc(sizeof(t_philo) * (args.number_of_philosophers + 1));
-    if(!*philo)
-        return ;
-    i = 0;
-    while(i < args.number_of_philosophers)
-    {
-        i++;
-    }
-    //(*philo)[i] = NULL;
-}*/
