@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 08:32:42 by zzehra            #+#    #+#             */
-/*   Updated: 2026/03/15 16:53:11 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/03/16 08:25:41 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 
 typedef struct s_args{
@@ -35,11 +36,15 @@ typedef struct s_philo{
     int left_fork_id;
     pthread_t thread;
     struct s_args *args;
+    pthread_mutex_t *fork_mutex;
 } t_philo;
 
 long	z_atoi(const char *str);
 char	*ft_strchr(const char *s, int c);
-int read_args(int argc, char **argv, t_args *args);
-void    init_philo(t_philo **philo, t_args args);
+void read_args(int argc, char **argv, t_args *args);
+void init_mutexes(pthread_mutex_t **fork_mutex, int fork_num);
+void    init_philos(t_philo **philo, t_args *args);
+void free_philo(t_philo **philo);
+void philos_function(t_philo *philo);
 
 #endif

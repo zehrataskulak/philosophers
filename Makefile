@@ -2,7 +2,7 @@ NAME = philo
 
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRCS = main.c read_args.c \
+SRCS = main.c read_args.c init_srcs.c philos_function.c \
 		srcs/z_atoi.c srcs/ft_strchr.c
 
 OBJS = $(SRCS:.c=.o)
