@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:12:20 by zzehra            #+#    #+#             */
-/*   Updated: 2026/03/16 08:26:48 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/03/16 12:34:33 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void assign_args(int argc, char **argv, t_args *args)
     args->time_to_die = z_atoi(argv[2]);
     args->time_to_eat = z_atoi(argv[3]);
     args->time_to_sleep = z_atoi(argv[4]);
+    args->dead_cntrl = 0;
     if(argc == 6)
         args->number_of_times_each_philosopher_must_eat = z_atoi(argv[5]);
 }
