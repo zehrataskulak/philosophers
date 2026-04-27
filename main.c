@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/11 20:11:17 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/27 20:26:16 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     }
     
     pthread_join(monitor_thread, NULL);
-    
+
     i = 0;
     while(i < args.number_of_philosophers)
     {

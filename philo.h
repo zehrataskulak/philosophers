@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 08:32:42 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/27 18:24:19 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/27 19:20:28 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_args{
     int time_to_sleep;
     int number_of_times_must_eat;
     
+    long long start_time;
     int dead_cntrl;
     pthread_mutex_t mutex_dead_cntrl;//
 

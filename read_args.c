@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:12:20 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/11 20:01:43 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/27 19:23:04 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void assign_args(int argc, char **argv, t_args *args)
         args->number_of_times_must_eat = z_atoi(argv[5]);
     else
         args->number_of_times_must_eat = -1;
+    args->start_time = find_time(-1);
 }
 
 void argument_error(int argc, char **argv)

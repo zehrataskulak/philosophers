@@ -1,6 +1,6 @@
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 SRCS = main.c read_args.c init_srcs.c philos_function.c \
 		srcs/z_atoi.c srcs/ft_strchr.c
