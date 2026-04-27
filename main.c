@@ -6,21 +6,55 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/03/16 12:42:11 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/11 20:11:17 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void *monitor_function(void *arg)
+{
+    t_philo *philo;
+    int i;
+    long long start_time;
+    long long curr_time;
+
+    philo = (t_philo *)arg;
+    start_time = find_time(-1);
+    i = 0;
+    while(1)
+    {
+        if(i == philo[0].args->number_of_philosophers)
+            i = 0;
+        curr_time = find_time(start_time);
+        pthread_mutex_lock(&philo[i].mutex_last_meal);
+        if(curr_time - philo[i].last_meal_time >= philo[i].args->time_to_die)
+        {
+            printf("time: %lld, %d philo died!\n", curr_time, philo[i].philo_id);
+            pthread_mutex_unlock(&philo[i].mutex_last_meal);
+            break ;
+        }
+        
+        pthread_mutex_unlock(&philo[i].mutex_last_meal);
+        i++;
+    }
+    pthread_mutex_lock(&philo[i].args->mutex_dead_cntrl);
+    philo[i].args->dead_cntrl = 1;
+    pthread_mutex_unlock(&philo[i].args->mutex_dead_cntrl);
+    return ((void *)(0));
+}
+
 int main(int argc, char **argv)
 {
     t_args args;
     t_philo *philo;
+    pthread_t monitor_thread;
+    
     int i;
-    int *res;
-  
+
     read_args(argc, argv, &args);
     init_philos(&philo, &args);
+    
     i = 0;
     while(i < args.number_of_philosophers)
     {
@@ -31,24 +65,23 @@ int main(int argc, char **argv)
         }
         i++;
     }
-    i = 0;
-    res = malloc(sizeof(int));
-    if(!res)
-        return (1);
     
-    while (1)
+    if (pthread_create(&monitor_thread, NULL, (void *)monitor_function, philo) != 0)
     {
-        if(i == args.number_of_philosophers)
-            i = i % args.number_of_philosophers;
-        pthread_join(philo[i].thread, (void **)res);
-        printf("%d\n", *res);
-        if(*res == -1)
-        {
-            free_philo(&philo);
-            return (0);
-        }
+        write(2, "Error: thread create failed\n", 29);
+        return (1);
+    }
+    
+    pthread_join(monitor_thread, NULL);
+    
+    i = 0;
+    while(i < args.number_of_philosophers)
+    {
+        pthread_join(philo[i].thread, NULL);
         i++;
     }
+    
+    
     free_philo(&philo);
     return (0);
 }
