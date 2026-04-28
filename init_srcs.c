@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 17:59:43 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/11 18:16:35 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/28 09:58:00 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void free_philo(t_philo **philo)
             pthread_mutex_destroy(&(*philo)[0].fork_mutex[i]);
         free((*philo)[0].fork_mutex);
     }
+
+    pthread_mutex_destroy(&args->mutex_dead_cntrl);
 
     // Filozof dizisini free et
     free(*philo);
