@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/28 09:55:59 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/28 17:57:12 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void *monitor_function(void *arg)
             break ;
         }   
         i++;
-
+        usleep(300);
     }
     pthread_mutex_lock(&philo[i].args->mutex_dead_cntrl);
     philo[i].args->dead_cntrl = 1;
@@ -76,39 +76,26 @@ int main(int argc, char **argv)
     t_args args;
     t_philo *philo;
     pthread_t monitor_thread;
-    
     int i;
 
     read_args(argc, argv, &args);
-    init_philos(&philo, &args);
-    
+    init_philos(&philo, &args);    
     i = 0;
     while(i < args.number_of_philosophers)
     {
-        if (pthread_create(&philo[i].thread, NULL, (void *)philos_function, &philo[i]) != 0)
-        {
-            write(2, "Error: thread create failed\n", 29);
-            return (1);
-        }
+        if (pthread_create(&philo[i].thread, NULL, (void *)philos_function, &philo[i]) != 0) 
+            return (write(2, "Error: thread create failed\n", 29), 1);
         i++;
     }
-    
     if (pthread_create(&monitor_thread, NULL, (void *)monitor_function, philo) != 0)
-    {
-        write(2, "Error: thread create failed\n", 29);
-        return (1);
-    }
-    
+        return (write(2, "Error: thread create failed\n", 29), 1);
     pthread_join(monitor_thread, NULL);
-
     i = 0;
     while(i < args.number_of_philosophers)
     {
         pthread_join(philo[i].thread, NULL);
         i++;
     }
-    
-    
     free_philo(&philo);
     return (0);
 }

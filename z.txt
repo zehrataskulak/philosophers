@@ -1,7 +1,0 @@
-time: 1, 1 took fork
-time: 1, 1 took fork
-time: 1, 1 philo eating
-time: 1, 3 took fork
-time: 1, 3 took fork
-time: 1, 3 philo eating
-time: 800, 4 philo died!

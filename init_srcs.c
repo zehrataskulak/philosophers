@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 17:59:43 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/28 09:58:00 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/04/28 17:55:38 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,11 @@ void free_philo(t_philo **philo)
         return;
 
     args = (*philo)[0].args;
-    // Her filozofun mutex'ini destroy et
     for (i = 0; i < args->number_of_philosophers; i++)
     {
         pthread_mutex_destroy(&(*philo)[i].mutex_last_meal);
     }
 
-    // Çatal mutex dizisini destroy et
     if ((*philo)[0].fork_mutex)
     {
         for (i = 0; i < args->number_of_philosophers; i++)
@@ -88,34 +86,6 @@ void free_philo(t_philo **philo)
 
     pthread_mutex_destroy(&args->mutex_dead_cntrl);
 
-    // Filozof dizisini free et
     free(*philo);
     *philo = NULL;
 }
-
-
-/*void free_philo(t_philo **philo)
-{
-    int i;
-    int philo_num;
-
-    if (!philo || !*philo)
-        return;
-
-    philo_num = (*philo)[0].args->number_of_philosophers;
-
-    i = 0;
-    while(i < philo_num)
-    {
-        pthread_mutex_destroy(&(*philo)[0].fork_mutex[i]);
-        i++;
-    }
-
-    free((*philo)[0].fork_mutex);
-    //pthread_mutex_destroy(&(*philo)[0].args->mutex_dead_cntrl);
-
-    free(*philo);
-    *philo = NULL;
-}*/
-
-
