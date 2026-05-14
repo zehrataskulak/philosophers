@@ -6,71 +6,69 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:12:20 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/28 09:57:53 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/14 18:04:12 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void assign_args(int argc, char **argv, t_args *args)
+void	assign_args(int argc, char **argv, t_args *args)
 {
-    args->number_of_philosophers = z_atoi(argv[1]);
-    args->time_to_die = z_atoi(argv[2]);
-    args->time_to_eat = z_atoi(argv[3]);
-    args->time_to_sleep = z_atoi(argv[4]);
-    args->dead_cntrl = 0;
-    if(argc == 6)
-        args->number_of_times_must_eat = z_atoi(argv[5]);
-    else
-        args->number_of_times_must_eat = -1;
-    args->start_time = find_time(-1);
+	args->number_of_philosophers = z_atoi(argv[1]);
+	args->time_to_die = z_atoi(argv[2]);
+	args->time_to_eat = z_atoi(argv[3]);
+	args->time_to_sleep = z_atoi(argv[4]);
+	args->dead_cntrl = 0;
+	if (argc == 6)
+		args->number_of_times_must_eat = z_atoi(argv[5]);
+	else
+		args->number_of_times_must_eat = -1;
+	args->start_time = find_time(-1);
 }
 
-void argument_error(int argc, char **argv)
+void	argument_error(int argc, char **argv)
 {
-    int i;
-    
-    i = 1;
-    while(i < argc)
-    {
-        if(ft_strchr(argv[i], '.'))
-        {
-            write(1, "Argument error!\n", 17);
-            exit(1);
-        }
-        i++;
-    }
-    i = 1;
-    while(i < 5)
-    {
-        if(!z_atoi(argv[i]) || z_atoi(argv[i]) < 0)
-        {
-            write(1, "Argument error!\n", 17);
-            exit(1);
-        }
-        i++;
-    }
+	int	i;
+
+	i = 1;
+	while (i < argc)
+	{
+		if (ft_strchr(argv[i], '.'))
+		{
+			write(1, "Argument error!\n", 17);
+			exit(1);
+		}
+		i++;
+	}
+	i = 1;
+	while (i < 5)
+	{
+		if (!z_atoi(argv[i]) || z_atoi(argv[i]) < 0)
+		{
+			write(1, "Argument error!\n", 17);
+			exit(1);
+		}
+		i++;
+	}
 }
 
-void read_args(int argc, char **argv, t_args *args)
+void	read_args(int argc, char **argv, t_args *args)
 {
-    
-    if(argc > 6 || argc < 5)
-    {
-        write(1, "Invalid number of arguments!\n", 30);
-        exit(1);
-    }
-    
-    if(argc == 6 && ((z_atoi(argv[5]) == 0 && argv[5][0] != '0') || (z_atoi(argv[5]) < 0)))
-    {
-        write(1, "Argument error!\n", 17);
-        exit(1);
-    }
-    else if(argc == 6 && (z_atoi(argv[5]) == 0 && argv[5][1]))
-    {
-        write(1, "Argument error!\n", 17);
-        exit(1);
-    }
-    
-    assign_args(argc, argv, args);
+	if (argc > 6 || argc < 5)
+	{
+		write(1, "Invalid number of arguments!\n", 30);
+		exit(1);
+	}
+	if (argc == 6 && ((z_atoi(argv[5]) == 0 && argv[5][0] != '0')
+		|| (z_atoi(argv[5]) < 0)))
+	{
+		write(1, "Argument error!\n", 17);
+		exit(1);
+	}
+	else if (argc == 6 && (z_atoi(argv[5]) == 0 && argv[5][1]))
+	{
+		write(1, "Argument error!\n", 17);
+		exit(1);
+	}
+	assign_args(argc, argv, args);
 }

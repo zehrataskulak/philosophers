@@ -6,185 +6,60 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 20:30:30 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/14 17:12:44 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/14 19:14:15 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int print_action(char *action, long long curr_time, t_philo *philo)
+long long	find_time(long long start_time)
 {
-	if(!ft_strcmp(action, "fork"))
-	{
-		if (f_dead_cntrl(philo))
-			return (1);
-		pthread_mutex_lock(&philo->args->mutex_printf);
-		printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
-		pthread_mutex_unlock(&philo->args->mutex_printf);
-	}
-	else if(!ft_strcmp(action, "eat"))
-	{
-		if (f_dead_cntrl(philo))
-			return (1);
-		pthread_mutex_lock(&philo->args->mutex_printf);
-		printf("time: %lld, %d philo eating\n", curr_time, philo->philo_id);
-		pthread_mutex_unlock(&philo->args->mutex_printf);
-	}
-	else if(!ft_strcmp(action, "sleep"))
-	{
-		if (f_dead_cntrl(philo))
-			return (1);
-		pthread_mutex_lock(&philo->args->mutex_printf);
-		printf("time: %lld, %d philo sleeping\n", curr_time, philo->philo_id);
-		pthread_mutex_unlock(&philo->args->mutex_printf);
-	}
+	struct timeval	tv;
+	long long		time;
+
+	gettimeofday(&tv, NULL);
+	if (start_time != -1)
+		time = tv.tv_sec * 1000LL + tv.tv_usec / 1000 - start_time;
 	else
+		time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
+	return (time);
+}
+
+int	f_dead_cntrl(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->args->mutex_dead_cntrl);
+	if (philo->args->dead_cntrl == 1)
 	{
-		if (f_dead_cntrl(philo))
-			return (1);
-		pthread_mutex_lock(&philo->args->mutex_printf);
-		printf("time: %lld, %d philo thinking\n", curr_time, philo->philo_id);
-		pthread_mutex_unlock(&philo->args->mutex_printf);
+		pthread_mutex_unlock(&philo->args->mutex_dead_cntrl);
+		return (1);
 	}
+	pthread_mutex_unlock(&philo->args->mutex_dead_cntrl);
 	return (0);
 }
-
-long long find_time(long long start_time)
-{
-    struct timeval	tv;
-    long long time;
-
-    gettimeofday(&tv, NULL);
-    if(start_time != -1)
-        time = tv.tv_sec * 1000LL + tv.tv_usec / 1000 - start_time;
-    else
-        time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
-    return (time);
-}
-
-int f_dead_cntrl(t_philo *philo)
-{
-    pthread_mutex_lock(&philo->args->mutex_dead_cntrl);
-    if (philo->args->dead_cntrl == 1)
-    {
-        pthread_mutex_unlock(&philo->args->mutex_dead_cntrl);
-        return (1);
-    }
-    pthread_mutex_unlock(&philo->args->mutex_dead_cntrl);
-    return (0);
-}
-
-void	take_forks(t_philo *philo)
-{
-	if (philo->philo_id % 2 != 0)
-	{
-		pthread_mutex_lock(&philo->fork_mutex[philo->left_fork_id]);
-		pthread_mutex_lock(&philo->fork_mutex[philo->right_fork_id]);
-	}
-	else
-	{
-		pthread_mutex_lock(&philo->fork_mutex[philo->right_fork_id]);
-		pthread_mutex_lock(&philo->fork_mutex[philo->left_fork_id]);
-	}
-}
-
-void    release_forks(t_philo *philo)
-{
-    pthread_mutex_unlock(&philo->fork_mutex[philo->right_fork_id]);
-    pthread_mutex_unlock(&philo->fork_mutex[philo->left_fork_id]);
-}
-
-int	philo_eat(t_philo *philo)
-{
-	long long	curr_time;
-
-	take_forks(philo);
-    curr_time = find_time(philo->args->start_time);
-	if (f_dead_cntrl(philo))
-	{
-		release_forks(philo);
-		return (1);
-	}
-	// printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
-	// printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
-	// printf("time: %lld, %d philo eating\n", curr_time, philo->philo_id);
-	
-	if(print_action("fork", curr_time, philo))
-		return (1);
-	if(print_action("fork", curr_time, philo))
-		return (1);
-	if(print_action("eat", curr_time, philo))
-		return (1);
-	////////////
-	
-	pthread_mutex_lock(&philo->mutex_last_meal);
-	philo->last_meal_time = find_time(philo->args->start_time);
-	pthread_mutex_unlock(&philo->mutex_last_meal);
-	z_usleep(philo->args->time_to_eat * 1000);
-	philo->eat_times++;
-    release_forks(philo);
-	return (0);
-}
-
-int	philo_sleep(t_philo *philo)
-{
-	long long	curr_time;
-
-	curr_time = find_time(philo->args->start_time);
-    // if (f_dead_cntrl(philo))
-	// 	return (1);
-	// printf("time: %lld, %d philo sleeping\n", curr_time, philo->philo_id);
-	if(print_action("sleep", curr_time, philo))
-		return (1);
-	/////
-	
-	z_usleep(philo->args->time_to_sleep * 1000);
-	return (0);
-}
-
-int philo_think(t_philo *philo)
-{
-    long long	curr_time;
-	
-    curr_time = find_time(philo->args->start_time);
-    // if (f_dead_cntrl(philo))
-	// 	return (1);
-	// printf("time: %lld, %d philo thinking\n", curr_time, philo->philo_id);
-	if(print_action("think", curr_time, philo))
-		return (1);
-	//////
-	
-    z_usleep(500);
-    return (0);
-}
-
 
 void	*philos_function(void *arg)
 {
-	t_philo		*philo;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	// if (philo->philo_id % 2 == 0)
-    //      usleep(500);
 	if (philo->args->number_of_philosophers == 1)
 	{
 		printf("time: %d, %d took the fork\n", 0, philo->philo_id);
-        printf("time: %d, 1 philo died!\n", philo->args->time_to_die);
+		printf("time: %d, 1 philo died!\n", philo->args->time_to_die);
 		return (NULL);
 	}
-    while (1)
+	while (1)
 	{
-        
-        if (f_dead_cntrl(philo))
-		    break ;
-        if (philo->args->number_of_times_must_eat != -1
+		if (f_dead_cntrl(philo))
+			break ;
+		if (philo->args->number_of_times_must_eat != -1
 			&& philo->args->number_of_times_must_eat == philo->eat_times)
 			break ;
 		if (philo_eat(philo))
 			break ;
 		if (philo_sleep(philo))
 			break ;
-        if (philo_think(philo))
+		if (philo_think(philo))
 			break ;
 	}
 	return (NULL);
