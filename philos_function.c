@@ -6,11 +6,48 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 20:30:30 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/28 17:25:18 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/14 17:12:44 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int print_action(char *action, long long curr_time, t_philo *philo)
+{
+	if(!ft_strcmp(action, "fork"))
+	{
+		if (f_dead_cntrl(philo))
+			return (1);
+		pthread_mutex_lock(&philo->args->mutex_printf);
+		printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
+		pthread_mutex_unlock(&philo->args->mutex_printf);
+	}
+	else if(!ft_strcmp(action, "eat"))
+	{
+		if (f_dead_cntrl(philo))
+			return (1);
+		pthread_mutex_lock(&philo->args->mutex_printf);
+		printf("time: %lld, %d philo eating\n", curr_time, philo->philo_id);
+		pthread_mutex_unlock(&philo->args->mutex_printf);
+	}
+	else if(!ft_strcmp(action, "sleep"))
+	{
+		if (f_dead_cntrl(philo))
+			return (1);
+		pthread_mutex_lock(&philo->args->mutex_printf);
+		printf("time: %lld, %d philo sleeping\n", curr_time, philo->philo_id);
+		pthread_mutex_unlock(&philo->args->mutex_printf);
+	}
+	else
+	{
+		if (f_dead_cntrl(philo))
+			return (1);
+		pthread_mutex_lock(&philo->args->mutex_printf);
+		printf("time: %lld, %d philo thinking\n", curr_time, philo->philo_id);
+		pthread_mutex_unlock(&philo->args->mutex_printf);
+	}
+	return (0);
+}
 
 long long find_time(long long start_time)
 {
@@ -68,13 +105,22 @@ int	philo_eat(t_philo *philo)
 		release_forks(philo);
 		return (1);
 	}
-	printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
-	printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
-	printf("time: %lld, %d philo eating\n", curr_time, philo->philo_id);
+	// printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
+	// printf("time: %lld, %d took fork\n", curr_time, philo->philo_id);
+	// printf("time: %lld, %d philo eating\n", curr_time, philo->philo_id);
+	
+	if(print_action("fork", curr_time, philo))
+		return (1);
+	if(print_action("fork", curr_time, philo))
+		return (1);
+	if(print_action("eat", curr_time, philo))
+		return (1);
+	////////////
+	
 	pthread_mutex_lock(&philo->mutex_last_meal);
 	philo->last_meal_time = find_time(philo->args->start_time);
 	pthread_mutex_unlock(&philo->mutex_last_meal);
-	usleep(philo->args->time_to_eat * 1000);
+	z_usleep(philo->args->time_to_eat * 1000);
 	philo->eat_times++;
     release_forks(philo);
 	return (0);
@@ -85,10 +131,14 @@ int	philo_sleep(t_philo *philo)
 	long long	curr_time;
 
 	curr_time = find_time(philo->args->start_time);
-    if (f_dead_cntrl(philo))
+    // if (f_dead_cntrl(philo))
+	// 	return (1);
+	// printf("time: %lld, %d philo sleeping\n", curr_time, philo->philo_id);
+	if(print_action("sleep", curr_time, philo))
 		return (1);
-	printf("time: %lld, %d philo sleeping\n", curr_time, philo->philo_id);
-	usleep(philo->args->time_to_sleep * 1000);
+	/////
+	
+	z_usleep(philo->args->time_to_sleep * 1000);
 	return (0);
 }
 
@@ -97,10 +147,14 @@ int philo_think(t_philo *philo)
     long long	curr_time;
 	
     curr_time = find_time(philo->args->start_time);
-    if (f_dead_cntrl(philo))
+    // if (f_dead_cntrl(philo))
+	// 	return (1);
+	// printf("time: %lld, %d philo thinking\n", curr_time, philo->philo_id);
+	if(print_action("think", curr_time, philo))
 		return (1);
-	printf("time: %lld, %d philo thinking\n", curr_time, philo->philo_id);
-    usleep(500);
+	//////
+	
+    z_usleep(500);
     return (0);
 }
 
@@ -110,6 +164,8 @@ void	*philos_function(void *arg)
 	t_philo		*philo;
 
 	philo = (t_philo *)arg;
+	// if (philo->philo_id % 2 == 0)
+    //      usleep(500);
 	if (philo->args->number_of_philosophers == 1)
 	{
 		printf("time: %d, %d took the fork\n", 0, philo->philo_id);

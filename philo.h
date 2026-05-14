@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 08:32:42 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/28 09:57:28 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/14 17:10:34 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_args{
     long long start_time;
     int dead_cntrl;
     pthread_mutex_t mutex_dead_cntrl;//
+    pthread_mutex_t mutex_printf;
 
     //long long start_time;
 } t_args;
@@ -50,6 +51,8 @@ typedef struct s_philo{
 
 long	z_atoi(const char *str);
 char	*ft_strchr(const char *s, int c);
+int     ft_strcmp(char *s1, char *s2);
+void    z_usleep(int microsecond);
 int f_dead_cntrl(t_philo *philo);
 void read_args(int argc, char **argv, t_args *args);
 void init_mutexes(pthread_mutex_t **fork_mutex, int fork_num);

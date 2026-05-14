@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/04/28 17:57:12 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/14 15:05:34 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int check_meal_times(t_philo *philo)
     i = 0;
     while(i < philo_num)
     {
-        if(philo[i].eat_times != must_eat_times)
+        if(philo[i].eat_times!= must_eat_times)
             return (0);
         i++;
     }
@@ -46,7 +46,11 @@ void *monitor_function(void *arg)
             i = 0;
         curr_time = find_time(philo[0].args->start_time);
         pthread_mutex_lock(&philo[i].mutex_last_meal);
-        if(curr_time - philo[i].last_meal_time >= philo[i].args->time_to_die)
+        if (philo[0].args->number_of_times_must_eat != -1 && philo[i].eat_times >= philo[0].args->number_of_times_must_eat)
+        {
+            pthread_mutex_unlock(&philo[i].mutex_last_meal);
+        }
+        else if(curr_time - philo[i].last_meal_time >= philo[i].args->time_to_die)
         {
             printf("time: %lld, %d philo died!\n", curr_time, philo[i].philo_id);
             pthread_mutex_unlock(&philo[i].mutex_last_meal);
@@ -63,7 +67,7 @@ void *monitor_function(void *arg)
             break ;
         }   
         i++;
-        usleep(300);
+        z_usleep(300);
     }
     pthread_mutex_lock(&philo[i].args->mutex_dead_cntrl);
     philo[i].args->dead_cntrl = 1;
