@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   print_action.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 19:06:38 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/16 13:19:26 by ztaskula         ###   ########.fr       */
+/*   Updated: 2026/05/16 15:12:45 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "philo.h"
 
 #include "philo.h"
 
@@ -39,7 +37,7 @@ int	print_action(char *action, long long curr_time, t_philo *philo)
 {
 	if (print_action_helper(action, curr_time, philo))
 		return (1);
-	else if (!ft_strcmp(action, "sleep"))
+	if (!ft_strcmp(action, "sleep"))
 	{
 		if (f_dead_cntrl(philo))
 			return (1);
@@ -47,7 +45,7 @@ int	print_action(char *action, long long curr_time, t_philo *philo)
 		printf("time: %lld, %d philo sleeping\n", curr_time, philo->philo_id);
 		pthread_mutex_unlock(&philo->args->mutex_printf);
 	}
-	else
+	else if (!ft_strcmp(action, "think"))
 	{
 		if (f_dead_cntrl(philo))
 			return (1);
