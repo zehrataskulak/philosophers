@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/14 18:50:05 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/16 13:19:14 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	*monitor_function(void *arg)
 		if (check_philos(philo, i, curr_time))
 			break ;
 		i++;
-		z_usleep(300);
+		usleep(300);
 	}
 	pthread_mutex_lock(&philo[i].args->mutex_dead_cntrl);
 	philo[i].args->dead_cntrl = 1;
@@ -106,6 +106,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (i < args.number_of_philosophers)
 		pthread_join(philo[i++].thread, NULL);
+	free_args(philo[0].args);
 	free_philo(&philo);
 	return (0);
 }

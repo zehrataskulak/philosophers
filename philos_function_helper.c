@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philos_function_helper.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/14 19:08:51 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/14 19:15:23 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/16 13:13:30 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	philo_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->mutex_last_meal);
 	philo->last_meal_time = find_time(philo->args->start_time);
 	pthread_mutex_unlock(&philo->mutex_last_meal);
-	z_usleep(philo->args->time_to_eat * 1000);
+	usleep(philo->args->time_to_eat * 1000);
 	philo->eat_times++;
 	release_forks(philo);
 	return (0);
@@ -65,7 +65,7 @@ int	philo_sleep(t_philo *philo)
 	curr_time = find_time(philo->args->start_time);
 	if (print_action("sleep", curr_time, philo))
 		return (1);
-	z_usleep(philo->args->time_to_sleep * 1000);
+	usleep(philo->args->time_to_sleep * 1000);
 	return (0);
 }
 
@@ -76,6 +76,6 @@ int	philo_think(t_philo *philo)
 	curr_time = find_time(philo->args->start_time);
 	if (print_action("think", curr_time, philo))
 		return (1);
-	z_usleep(500);
+	usleep(500);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 08:32:42 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/14 19:12:06 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/16 13:14:56 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_philo
 long		z_atoi(const char *str);
 char		*ft_strchr(const char *s, int c);
 int			ft_strcmp(char *s1, char *s2);
-void		z_usleep(int microsecond);
 int			f_dead_cntrl(t_philo *philo);
 int			print_action(char *action, long long curr_time, t_philo *philo);
 int			philo_eat(t_philo *philo);
@@ -57,6 +56,7 @@ int			philo_think(t_philo *philo);
 void		read_args(int argc, char **argv, t_args *args);
 void		init_mutexes(pthread_mutex_t **fork_mutex, int fork_num);
 void		init_philos(t_philo **philo, t_args *args);
+void		free_args(t_args *args);
 void		free_philo(t_philo **philo);
 void		*philos_function(void *arg);
 long long	find_time(long long start_time);

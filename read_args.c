@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:12:20 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/14 18:04:12 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/16 12:48:59 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	assign_args(int argc, char **argv, t_args *args)
 	else
 		args->number_of_times_must_eat = -1;
 	args->start_time = find_time(-1);
+	pthread_mutex_init(&args->mutex_dead_cntrl, NULL);
+	pthread_mutex_init(&args->mutex_printf, NULL);
 }
 
 void	argument_error(int argc, char **argv)

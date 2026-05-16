@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_srcs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/15 17:59:43 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/14 18:06:53 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/16 12:50:46 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,12 @@ void	free_philo(t_philo **philo)
 		}
 		free((*philo)[0].fork_mutex);
 	}
-	pthread_mutex_destroy(&args->mutex_dead_cntrl);
 	free(*philo);
 	*philo = NULL;
+}
+
+void	free_args(t_args *args)
+{
+	pthread_mutex_destroy(&args->mutex_dead_cntrl);
+	pthread_mutex_destroy(&args->mutex_printf);
 }
