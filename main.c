@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/16 13:19:14 by ztaskula         ###   ########.fr       */
+/*   Updated: 2026/05/23 11:53:31 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	check_philos(t_philo *philo, int i, long long curr_time)
 	else if (curr_time - philo[i].last_meal_time
 		>= philo[i].args->time_to_die)
 	{
-		printf("time: %lld, %d philo died!\n", curr_time, philo[i].philo_id);
+		printf("%lld %d philo died!\n", curr_time, philo[i].philo_id);
 		pthread_mutex_unlock(&philo[i].mutex_last_meal);
 		return (1);
 	}

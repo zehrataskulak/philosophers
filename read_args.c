@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_args.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
+/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/24 09:12:20 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/16 12:48:59 by ztaskula         ###   ########.fr       */
+/*   Updated: 2026/05/23 12:02:12 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ void	assign_args(int argc, char **argv, t_args *args)
 	pthread_mutex_init(&args->mutex_printf, NULL);
 }
 
+void	arg_error_exit(void)
+{
+	write(1, "Argument error!\n", 17);
+	exit(1);
+}
+
 void	argument_error(int argc, char **argv)
 {
 	int	i;
@@ -36,21 +42,23 @@ void	argument_error(int argc, char **argv)
 	while (i < argc)
 	{
 		if (ft_strchr(argv[i], '.'))
-		{
-			write(1, "Argument error!\n", 17);
-			exit(1);
-		}
+			arg_error_exit();
+		if (i == 1 && z_atoi(argv[i]) > 200)
+			arg_error_exit();
+		if (i < 5 && z_atoi(argv[i]) <= 0)
+			arg_error_exit();
 		i++;
 	}
-	i = 1;
-	while (i < 5)
+	if (argc == 6)
 	{
-		if (!z_atoi(argv[i]) || z_atoi(argv[i]) < 0)
+		if (z_atoi(argv[5]) < 0)
+			arg_error_exit();
+		if (z_atoi(argv[5]) == 0)
 		{
-			write(1, "Argument error!\n", 17);
-			exit(1);
+			if (argv[5][0] != '0' || argv[5][1])
+				arg_error_exit();
+			exit(0);
 		}
-		i++;
 	}
 }
 
@@ -61,16 +69,6 @@ void	read_args(int argc, char **argv, t_args *args)
 		write(1, "Invalid number of arguments!\n", 30);
 		exit(1);
 	}
-	if (argc == 6 && ((z_atoi(argv[5]) == 0 && argv[5][0] != '0')
-		|| (z_atoi(argv[5]) < 0)))
-	{
-		write(1, "Argument error!\n", 17);
-		exit(1);
-	}
-	else if (argc == 6 && (z_atoi(argv[5]) == 0 && argv[5][1]))
-	{
-		write(1, "Argument error!\n", 17);
-		exit(1);
-	}
+	argument_error(argc, argv);
 	assign_args(argc, argv, args);
 }

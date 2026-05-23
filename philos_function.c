@@ -6,7 +6,7 @@
 /*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 20:30:30 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/16 15:06:47 by zzehra           ###   ########.fr       */
+/*   Updated: 2026/05/23 11:20:41 by zzehra           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	*philos_function(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->args->number_of_philosophers == 1)
 	{
-		printf("time: %d, %d took the fork\n", 0, philo->philo_id);
-		printf("time: %d, 1 philo died!\n", philo->args->time_to_die);
+		printf("%d %d has taken a fork\n", 0, philo->philo_id);
+		printf("%d 1 philo died!\n", philo->args->time_to_die);
 		return (NULL);
 	}
 	while (1)
