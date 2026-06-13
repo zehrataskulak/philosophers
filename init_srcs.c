@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/15 17:59:43 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/16 12:50:46 by ztaskula         ###   ########.fr       */
+/*   Created: 2026/06/13 20:20:02 by ztaskula          #+#    #+#             */
+/*   Updated: 2026/06/13 20:20:04 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	init_philos(t_philo **philo, t_args *args)
 		(*philo)[i].thread = 0;
 		(*philo)[i].fork_mutex = fork_mutex;
 		pthread_mutex_init(&(*philo)[i].mutex_last_meal, NULL);
+		pthread_mutex_init(&(*philo)[i].mutex_eat_times, NULL);
 		i++;
 	}
 }
@@ -73,6 +74,7 @@ void	free_philo(t_philo **philo)
 	while (i < args->number_of_philosophers)
 	{
 		pthread_mutex_destroy(&(*philo)[i].mutex_last_meal);
+		pthread_mutex_destroy(&(*philo)[i].mutex_eat_times);
 		i++;
 	}
 	if ((*philo)[0].fork_mutex)

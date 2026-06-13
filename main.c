@@ -3,56 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zzehra <zzehra@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/24 09:13:08 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/23 11:53:31 by zzehra           ###   ########.fr       */
+/*   Created: 2026/06/13 20:20:08 by ztaskula          #+#    #+#             */
+/*   Updated: 2026/06/13 20:31:45 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_meal_times(t_philo *philo)
-{
-	int	i;
-	int	philo_num;
-	int	must_eat_times;
-
-	philo_num = philo[0].args->number_of_philosophers;
-	must_eat_times = philo[0].args->number_of_times_must_eat;
-	i = 0;
-	while (i < philo_num)
-	{
-		if (philo[i].eat_times != must_eat_times)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	check_philos(t_philo *philo, int i, long long curr_time)
+int	check_philo_death(t_philo *philo, int i, long long curr_time)
 {
 	pthread_mutex_lock(&philo[i].mutex_last_meal);
-	if (philo[0].args->number_of_times_must_eat != -1
-		&& philo[i].eat_times >= philo[0].args->number_of_times_must_eat)
-		pthread_mutex_unlock(&philo[i].mutex_last_meal);
-	else if (curr_time - philo[i].last_meal_time
-		>= philo[i].args->time_to_die)
-	{
-		printf("%lld %d philo died!\n", curr_time, philo[i].philo_id);
-		pthread_mutex_unlock(&philo[i].mutex_last_meal);
-		return (1);
-	}
-	else
-		pthread_mutex_unlock(&philo[i].mutex_last_meal);
-	if (philo[0].args->number_of_times_must_eat != -1
-		&& check_meal_times(philo))
+	if (curr_time - philo[i].last_meal_time >= philo[i].args->time_to_die)
 	{
 		pthread_mutex_lock(&philo[i].args->mutex_dead_cntrl);
 		philo[i].args->dead_cntrl = 1;
 		pthread_mutex_unlock(&philo[i].args->mutex_dead_cntrl);
+		pthread_mutex_lock(&philo[i].args->mutex_printf);
+		printf("%lld %d philo died\n", curr_time, philo[i].philo_id);
+		pthread_mutex_unlock(&philo[i].args->mutex_printf);
+		pthread_mutex_unlock(&philo[i].mutex_last_meal);
 		return (1);
 	}
+	pthread_mutex_unlock(&philo[i].mutex_last_meal);
+	return (0);
+}
+
+int	check_philos(t_philo *philo, int i, long long curr_time)
+{
+	int	must_eat;
+
+	must_eat = philo[0].args->number_of_times_must_eat;
+	if (check_eat_status(philo, i, must_eat))
+	{
+		if (check_philo_death(philo, i, curr_time))
+			return (1);
+	}
+	if (must_eat != -1 && check_meal_times(philo))
+		return (check_meal_limit(philo));
 	return (0);
 }
 
@@ -76,9 +65,7 @@ void	*monitor_function(void *arg)
 		i++;
 		usleep(300);
 	}
-	pthread_mutex_lock(&philo[i].args->mutex_dead_cntrl);
-	philo[i].args->dead_cntrl = 1;
-	pthread_mutex_unlock(&philo[i].args->mutex_dead_cntrl);
+	set_dead_flag(philo, i);
 	return (NULL);
 }
 

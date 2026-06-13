@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ztaskula <ztaskula@student.42istanbul.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/14 19:08:51 by zzehra            #+#    #+#             */
-/*   Updated: 2026/05/16 13:13:30 by ztaskula         ###   ########.fr       */
+/*   Created: 2026/06/13 20:20:24 by ztaskula          #+#    #+#             */
+/*   Updated: 2026/06/13 20:40:20 by ztaskula         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,31 @@ void	release_forks(t_philo *philo)
 
 int	philo_eat(t_philo *philo)
 {
-	long long	curr_time;
-
-	take_forks(philo);
-	curr_time = find_time(philo->args->start_time);
 	if (f_dead_cntrl(philo))
+		return (1);
+	take_forks(philo);
+	if (f_dead_cntrl(philo)
+		|| print_action("fork", philo)
+		|| print_action("fork", philo)
+		|| print_action("eat", philo))
 	{
 		release_forks(philo);
 		return (1);
 	}
-	if (print_action("fork", curr_time, philo))
-		return (1);
-	if (print_action("fork", curr_time, philo))
-		return (1);
-	if (print_action("eat", curr_time, philo))
-		return (1);
 	pthread_mutex_lock(&philo->mutex_last_meal);
 	philo->last_meal_time = find_time(philo->args->start_time);
 	pthread_mutex_unlock(&philo->mutex_last_meal);
 	usleep(philo->args->time_to_eat * 1000);
+	pthread_mutex_lock(&philo->mutex_eat_times);
 	philo->eat_times++;
+	pthread_mutex_unlock(&philo->mutex_eat_times);
 	release_forks(philo);
 	return (0);
 }
 
 int	philo_sleep(t_philo *philo)
 {
-	long long	curr_time;
-
-	curr_time = find_time(philo->args->start_time);
-	if (print_action("sleep", curr_time, philo))
+	if (print_action("sleep", philo))
 		return (1);
 	usleep(philo->args->time_to_sleep * 1000);
 	return (0);
@@ -71,11 +66,21 @@ int	philo_sleep(t_philo *philo)
 
 int	philo_think(t_philo *philo)
 {
-	long long	curr_time;
+	long long	time_diff;
 
-	curr_time = find_time(philo->args->start_time);
-	if (print_action("think", curr_time, philo))
+	if (f_dead_cntrl(philo))
 		return (1);
-	usleep(500);
+	if (print_action("think", philo))
+		return (1);
+	time_diff = philo->args->time_to_die
+		- philo->args->time_to_eat
+		- philo->args->time_to_sleep;
+	if (time_diff > 0)
+	{
+		if (philo->args->number_of_philosophers % 2 == 0)
+			usleep(time_diff / 4 * 1000);
+		else
+			usleep(time_diff / 2 * 1000);
+	}
 	return (0);
 }
